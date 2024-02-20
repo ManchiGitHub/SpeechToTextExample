@@ -25,18 +25,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, bottomInsets)
-            insets
-        }
-
         /* --- THE IMPORTANT PART --- */
         binding.voiceButton.setOnClickListener {
             lifecycleScope.launch {
                 val text = speechEngine.getTextFromSpeech()
                 binding.inputTarget.text = text
             }
+        }
+
+        /* Not Important */
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, bottomInsets)
+            insets
         }
     }
 }
