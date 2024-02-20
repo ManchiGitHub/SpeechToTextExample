@@ -1,13 +1,16 @@
 package com.example.myapplication
 
 import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.CancellationException
 import java.util.*
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
@@ -34,7 +37,6 @@ class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
             SPEECH_REQUEST,
             ActivityResultContracts.StartActivityForResult()
         ) { activityResult ->
-
             // Process the speech recognition result
             if (activityResult.resultCode == RESULT_OK && activityResult.data != null) {
                 val text = extractText(activityResult)
@@ -44,8 +46,14 @@ class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
             }
         }
 
-        // Start the speech recognition intent
-        launcher.launch(intent)
+        try {
+            // Start the speech recognition intent
+            launcher.launch(intent)
+        } catch (ex: CancellationException){
+            throw ex
+        } catch (ex: Exception){
+            cont.resumeWithException(ex)
+        }
     }
 
     private fun extractText(activityResult: ActivityResult): String {
