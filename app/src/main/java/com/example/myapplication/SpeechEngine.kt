@@ -1,17 +1,16 @@
 package com.example.myapplication
 
 import android.app.Activity.RESULT_OK
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
 
@@ -19,7 +18,7 @@ class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
      * A simple method that converts speech to text using Google's built-in speech recognition service.
      * Wrapped inside a suspendCoroutine for easy use.
      */
-    suspend fun getTextFromSpeech(): String = suspendCoroutine { cont ->
+    suspend fun getTextFromSpeech(): String = suspendCancellableCoroutine { cont ->
 
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
 
@@ -37,6 +36,8 @@ class SpeechEngine(private val resultRegistry: ActivityResultRegistry) {
             SPEECH_REQUEST,
             ActivityResultContracts.StartActivityForResult()
         ) { activityResult ->
+            if (!cont.isActive) return@register
+
             // Process the speech recognition result
             if (activityResult.resultCode == RESULT_OK && activityResult.data != null) {
                 val text = extractText(activityResult)
