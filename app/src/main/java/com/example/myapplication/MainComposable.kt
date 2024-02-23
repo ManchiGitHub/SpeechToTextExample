@@ -26,8 +26,8 @@ fun PreviewSpeechToTextScreen(){
 fun MainComposable(navController: NavHostController) {
     Scaffold { innerPadding ->
         NavHost(
-            navController = navController,
             modifier = Modifier.padding(innerPadding),
+            navController = navController,
             startDestination = NavGraphRoutes.Home.name
         ) {
             homeNavGraph(navController)
