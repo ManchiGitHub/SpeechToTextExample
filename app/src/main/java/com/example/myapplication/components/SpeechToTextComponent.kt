@@ -1,4 +1,4 @@
-package com.example.myapplication.home
+package com.example.myapplication.components
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -8,9 +8,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,16 +67,19 @@ fun SpeechToTextSection(
     )
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = speechResult.ifEmpty { "..." },
+            text = speechResult.ifEmpty { "Tap the button below to activate the speech recognizer" },
+            textAlign = TextAlign.Center,
             fontSize = 18.sp,
-            modifier = Modifier.padding(25.dp)
+            modifier = Modifier.padding(25.dp).alpha(0.6f)
         )
-        Button(
+        ElevatedButton(
+            contentPadding = PaddingValues(25.dp),
+            colors = ButtonDefaults.elevatedButtonColors(),
             modifier = Modifier.fillMaxWidth(),
             onClick = { speechIntentLauncher.launch(speechToTextIntent) }
         ) {

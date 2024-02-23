@@ -8,8 +8,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.archive.archiveNavGraph
 import com.example.myapplication.home.homeNavGraph
-import com.example.myapplication.navigation.AppNavigation
+import com.example.myapplication.navigation.NavGraphRoutes
 import theme.MyApplicationTheme
 
 @Preview
@@ -27,9 +28,10 @@ fun MainComposable(navController: NavHostController) {
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            startDestination = AppNavigation.HomeRoute
+            startDestination = NavGraphRoutes.Home.name
         ) {
-            homeNavGraph()
+            homeNavGraph(navController)
+            archiveNavGraph(navController)
         }
     }
 }
