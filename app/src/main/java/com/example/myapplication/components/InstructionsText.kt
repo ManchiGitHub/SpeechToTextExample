@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import theme.MyApplicationTheme
 
@@ -25,11 +27,14 @@ fun PreviewSpeechToTextScreen() {
 fun InstructionsText(
     modifier: Modifier = Modifier,
     text: String = "",
+    fontSize : TextUnit = 18.sp
 ) {
     Text(
         text = text,
-        textAlign = TextAlign.Center,
-        fontSize = 18.sp,
+        textAlign = TextAlign.Start,
+        fontSize = fontSize,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = modifier.alpha(0.6f)
     )
 }

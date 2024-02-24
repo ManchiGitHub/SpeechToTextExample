@@ -1,11 +1,13 @@
 package com.example.myapplication.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardVoice
 import androidx.compose.material3.Icon
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
 import com.example.myapplication.common.ScaffoldWithSnackbar
 import com.example.myapplication.components.InstructionsText
@@ -34,11 +37,12 @@ import theme.MyApplicationTheme
 @Preview
 @Composable
 fun PreviewHomeLayout() {
+    val navController = rememberNavController()
     MyApplicationTheme {
-        HomeLayout(
+        HomeScreen(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background),
+            navController
         )
     }
 }
@@ -62,11 +66,14 @@ fun HomeLayout(
             .collect { snackbarHostState.showSnackbar(speechTextResult) }
     }
 
+    LaunchedEffect(isRecordCheck){
+
+    }
+
     ScaffoldWithSnackbar(
         snackbarHostState = snackbarHostState,
         floatingActionButton = {
             LargeFloatingActionButton(
-                modifier = modifier,
                 onClick = {
                     speechLauncher.launch(speechToText.intent)
                 }
@@ -83,15 +90,14 @@ fun HomeLayout(
                 .fillMaxSize()
                 .padding(innerPadding),
         ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = modifier
-                    .align(Alignment.TopCenter)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
             ) {
                 InstructionsText(
                     text = stringResource(R.string.switch_to_use_the_microphone_directly)
                 )
-                Spacer(modifier = Modifier.padding(top = 16.dp))
                 Switch(
                     checked = isRecordCheck,
                     onCheckedChange = {
