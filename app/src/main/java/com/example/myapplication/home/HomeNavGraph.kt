@@ -15,7 +15,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         composable(
             route = HomeNavOptions.Main.name,
             content = {
-                HomeScreen(navController = navController)
+                HomeScreen()
             }
         )
     }

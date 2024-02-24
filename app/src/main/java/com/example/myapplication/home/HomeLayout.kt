@@ -2,7 +2,6 @@ package com.example.myapplication.home
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -35,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
@@ -48,7 +48,7 @@ fun PreviewHomeLayout() {
     val navController = rememberNavController()
     MyApplicationTheme {
         HomeLayout(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background).padding(16.dp),
         )
     }
 }
@@ -111,7 +111,7 @@ fun HomeLayout(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             LargeFloatingActionButton(
-                onClick = onLaunchSpeechToText
+                onClick = { onLaunchSpeechToText() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardVoice,
@@ -133,7 +133,11 @@ fun HomeLayout(
                     .padding(top = 16.dp)
             ) {
                 InstructionsText(
-                    text = stringResource(R.string.switch_to_use_the_microphone_directly)
+                    modifier.weight(1f),
+                    textSize = 20.sp,
+                    text = stringResource(R.string.enable_recording),
+                    subtext = stringResource(R.string.flip_the_switch_to_use_the_mediarecorder),
+                    asteriskText = stringResource(R.string.requires_audio_recording_permissions),
                 )
                 Switch(
                     checked = isRecordCheck,

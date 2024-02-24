@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="speech_to_text_action_button">Speech to Text action button</string>
-    <string name="switch_to_use_the_microphone_directly">Enable recording</string>
+    <string name="enable_recording">Enable recording</string>
+    <string name="flip_the_switch_to_use_the_mediarecorder">Flip the switch to use the MediaRecorder API instead of Google\'s intent-based Speech Recognition service.</string>
+    <string name="requires_audio_recording_permissions">*Requires audio recording permissions</string>
 </resources>
