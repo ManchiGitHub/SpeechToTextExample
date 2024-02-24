@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="speech_to_text_action_button">Speech to Text action button</string>
+    <string name="switch_to_use_the_microphone_directly">Switch to use the microphone directly</string>
 </resources>
