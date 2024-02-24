@@ -1,14 +1,7 @@
 package com.example.myapplication.home
 
 import android.Manifest
-import android.content.Intent
-import android.content.Intent.CATEGORY_DEFAULT
-import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
+import com.example.myapplication.common.AppIntents
 import com.example.myapplication.components.InstructionsText
 import theme.MyApplicationTheme
 
@@ -74,12 +68,8 @@ fun HomeLayout(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted: Boolean ->
             isRecordCheck = isGranted
-            if (isGranted) {
-                // Permission granted, proceed with recording
-            } else {
-                // Permission denied, explain the necessity of the permission
-                errorMessage =
-                    "Permission needed for recording. Please enable it in settings."
+            if (!isGranted) {
+                errorMessage = "Permission needed for recording. Please enable it in settings."
             }
         }
     )
@@ -92,22 +82,12 @@ fun HomeLayout(
                 duration = SnackbarDuration.Long
             )
             when (result) {
-                SnackbarResult.ActionPerformed -> {
-                    val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
-                    with(intent) {
-                        data = Uri.fromParts("package", context.packageName, null)
-                        addCategory(CATEGORY_DEFAULT)
-                        addFlags(FLAG_ACTIVITY_NEW_TASK)
-                        addFlags(FLAG_ACTIVITY_NO_HISTORY)
-                        addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                    }
-                    context.startActivity(intent)
-                }
-
+                SnackbarResult.ActionPerformed -> AppIntents.openDetailsSettings(context)
                 SnackbarResult.Dismissed -> {}
+            }.also {
+                // reset the error message after handling it
+                errorMessage = ""
             }
-
-            errorMessage = ""
         }
     }
 
@@ -120,8 +100,6 @@ fun HomeLayout(
 
             if (isRecordAudioPermissionGranted) {
                 Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
-                // Permission already granted, proceed with functionality
-
             } else {
                 // Request permission
                 permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
@@ -162,7 +140,6 @@ fun HomeLayout(
                     onCheckedChange = { isRecordCheck = it }
                 )
             }
-
         }
     }
 }
