@@ -2,8 +2,6 @@ package com.example.myapplication
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -25,12 +23,11 @@ fun PreviewSpeechToTextScreen() {
 
 @Composable
 fun MainComposable(navController: NavHostController) {
-    val snackbarHostState = remember { SnackbarHostState() }
-        NavHost(
-            navController = navController,
-            startDestination = NavGraphRoutes.Home.name
-        ) {
-            homeNavGraph(navController, snackbarHostState)
-            recordNavGraph(navController)
-        }
+    NavHost(
+        navController = navController,
+        startDestination = NavGraphRoutes.Home.name
+    ) {
+        homeNavGraph(navController)
+        recordNavGraph(navController)
+    }
 }
