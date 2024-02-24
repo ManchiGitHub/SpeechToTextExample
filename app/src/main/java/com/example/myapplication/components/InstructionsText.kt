@@ -24,11 +24,10 @@ fun PreviewSpeechToTextScreen() {
 @Composable
 fun InstructionsText(
     modifier: Modifier = Modifier,
-    input: String = "",
-    fallbackText: String = ""
+    text: String = "",
 ) {
     Text(
-        text = input.ifEmpty { fallbackText },
+        text = text,
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
         modifier = modifier.alpha(0.6f)

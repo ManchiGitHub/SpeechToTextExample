@@ -19,7 +19,7 @@ fun PreviewHomeScreen() {
         HomeScreen(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
+            ,
             navController = navController
         )
     }
@@ -31,7 +31,7 @@ fun HomeScreen(
     navController: NavController,
 ) {
     HomeLayout(
-        modifier = modifier,
+        modifier = modifier.padding(16.dp),
     )
 }
 
