@@ -1,4 +1,4 @@
-package com.example.myapplication.archive
+package com.example.myapplication.record
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -15,7 +15,7 @@ import com.example.myapplication.navigation.NavigationTransitions
 typealias ScreenEnterTransition = AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
 typealias ScreenExitTransition = AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
 
-fun NavGraphBuilder.archiveNavGraph(
+fun NavGraphBuilder.recordNavGraph(
     navController: NavHostController,
     enterTransition: ScreenEnterTransition = NavigationTransitions.defaultEnterTransition(),
     exitTransition: ScreenExitTransition = NavigationTransitions.defaultExitTransition()
@@ -28,7 +28,7 @@ fun NavGraphBuilder.archiveNavGraph(
             route = ArchiveNavOptions.RecentEntries.name,
             enterTransition = enterTransition,
             exitTransition = exitTransition,
-            content = { ArchiveScreen(navController = navController) }
+            content = { RecordScreen(navController = navController) }
         )
     }
 }

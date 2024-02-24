@@ -1,21 +1,22 @@
 package com.example.myapplication
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.archive.archiveNavGraph
+import com.example.myapplication.record.recordNavGraph
 import com.example.myapplication.home.homeNavGraph
 import com.example.myapplication.navigation.NavGraphRoutes
 import theme.MyApplicationTheme
 
 @Preview
 @Composable
-fun PreviewSpeechToTextScreen(){
+fun PreviewSpeechToTextScreen() {
     val navController = rememberNavController()
     MyApplicationTheme {
         MainComposable(navController = navController)
@@ -24,14 +25,12 @@ fun PreviewSpeechToTextScreen(){
 
 @Composable
 fun MainComposable(navController: NavHostController) {
-    Scaffold { innerPadding ->
+    val snackbarHostState = remember { SnackbarHostState() }
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = NavGraphRoutes.Home.name
         ) {
-            homeNavGraph(navController)
-            archiveNavGraph(navController)
+            homeNavGraph(navController, snackbarHostState)
+            recordNavGraph(navController)
         }
-    }
 }
