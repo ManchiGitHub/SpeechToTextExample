@@ -99,7 +99,7 @@ fun HomeLayout(
             ) == PackageManager.PERMISSION_GRANTED
 
             if (isRecordAudioPermissionGranted) {
-                Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
+                // recording permissions is granted
             } else {
                 // Request permission
                 permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
