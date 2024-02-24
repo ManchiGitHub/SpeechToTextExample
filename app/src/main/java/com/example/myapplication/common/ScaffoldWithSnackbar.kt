@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ScaffoldWithSnackbar(
-    floatingActionButton: @Composable () -> Unit = {},
     snackbarHostState: SnackbarHostState,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit = {}
 ) {
     Scaffold(
