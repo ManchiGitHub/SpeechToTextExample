@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -26,9 +25,8 @@ import com.example.myapplication.R
 @Composable
 fun RecordLayout(
     modifier: Modifier = Modifier,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loader))
     val progress by animateLottieCompositionAsState(
         composition = lottieComposition,
