@@ -18,7 +18,6 @@ fun PreviewSpeechToTextScreen() {
         MainComposable(navController = navController)
     }
 }
-
 @Composable
 fun MainComposable(navController: NavHostController) {
     NavHost(

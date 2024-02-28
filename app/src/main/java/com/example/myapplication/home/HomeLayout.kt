@@ -2,33 +2,26 @@ package com.example.myapplication.home
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardVoice
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,8 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
-import com.example.myapplication.common.AppIntents
-import com.example.myapplication.components.InstructionsText
+import com.example.myapplication.components.SettingSwitch
 import theme.MyApplicationTheme
 
 @Preview
@@ -48,7 +40,9 @@ fun PreviewHomeLayout() {
     val navController = rememberNavController()
     MyApplicationTheme {
         HomeLayout(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background).padding(16.dp),
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
         )
     }
 }
@@ -57,40 +51,13 @@ fun PreviewHomeLayout() {
 fun HomeLayout(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    isRecordCheck: Boolean = false,
     onLaunchSpeechToText: () -> Unit = {},
+    onLaunchPermission: () -> Unit = {},
+    onCheckedChange: (isChecked: Boolean) -> Unit = {},
+    onRecordPermissionGranted: ()->Unit = {}
 ) {
     val context = LocalContext.current
-
-    var isRecordCheck by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            isRecordCheck = isGranted
-            if (!isGranted) {
-                errorMessage = "Permission needed for recording. Please enable it in settings."
-            }
-        }
-    )
-
-    LaunchedEffect(errorMessage) {
-        if (errorMessage.isNotEmpty()) {
-            val result = snackbarHostState.showSnackbar(
-                message = errorMessage,
-                actionLabel = "Settings",
-                duration = SnackbarDuration.Long
-            )
-            when (result) {
-                SnackbarResult.ActionPerformed -> AppIntents.openDetailsSettings(context)
-                SnackbarResult.Dismissed -> {}
-            }.also {
-                // reset the error message after handling it
-                errorMessage = ""
-            }
-        }
-    }
-
     LaunchedEffect(isRecordCheck) {
         if (isRecordCheck) {
             val isRecordAudioPermissionGranted = ContextCompat.checkSelfPermission(
@@ -100,9 +67,10 @@ fun HomeLayout(
 
             if (isRecordAudioPermissionGranted) {
                 // recording permissions is granted
+                onRecordPermissionGranted()
             } else {
                 // Request permission
-                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                onLaunchPermission()
             }
         }
     }
@@ -120,30 +88,20 @@ fun HomeLayout(
             }
         }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = modifier
+                .padding(innerPadding)
                 .fillMaxSize()
-                .padding(innerPadding),
+                .verticalScroll(rememberScrollState())
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            ) {
-                InstructionsText(
-                    modifier.weight(1f),
-                    textSize = 20.sp,
-                    text = stringResource(R.string.enable_recording),
-                    subtext = stringResource(R.string.flip_the_switch_to_use_the_mediarecorder),
-                    asteriskText = stringResource(R.string.requires_audio_recording_permissions),
-                )
-                Switch(
-                    checked = isRecordCheck,
-                    onCheckedChange = { isRecordCheck = it }
-                )
-            }
+            SettingSwitch(
+                textSize = 20.sp,
+                text = stringResource(R.string.enable_recording),
+                subtext = stringResource(R.string.flip_the_switch_to_use_the_mediarecorder),
+                asteriskText = stringResource(R.string.requires_audio_recording_permissions),
+                isRecordCheck = isRecordCheck,
+                onCheckedChange = { onCheckedChange(it) }
+            )
         }
     }
 }

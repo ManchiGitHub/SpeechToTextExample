@@ -1,5 +1,6 @@
 package com.example.myapplication.home
 
+import android.Manifest
 import android.app.Activity
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,8 +38,10 @@ fun HomeScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var speechTextResult by remember { mutableStateOf("") }
+    var isRecordCheck by remember { mutableStateOf(false) }
+    var isPermissionsError by remember { mutableStateOf(false) }
 
-    val launcher = rememberLauncherForActivityResult(
+    val speechLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -50,12 +53,31 @@ fun HomeScreen(
         }
     )
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = {
+            isRecordCheck = it
+            isPermissionsError = it.not()
+
+            if (isRecordCheck) {
+                // use recorder
+            } else {
+                // use default speechLauncher
+            }
+        }
+    )
+
+    val launchRecordAudioPermission = {
+        permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+    }
+
     HomeLayout(
         modifier = modifier.padding(16.dp),
         snackbarHostState = snackbarHostState,
-        onLaunchSpeechToText = {
-            launcher.launch(SpeechIntent)
-        }
+        isRecordCheck = isRecordCheck,
+        onLaunchSpeechToText = { speechLauncher.launch(SpeechIntent) },
+        onLaunchPermission = { launchRecordAudioPermission() },
+        onCheckedChange = { isRecordCheck = it }
     )
 }
 
