@@ -1,6 +1,8 @@
 plugins {
+    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -80,4 +82,16 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     implementation("com.airbnb.android:lottie-compose:4.0.0")
+
+    implementation("com.google.dagger:hilt-android:2.50")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
+
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
+    kapt("androidx.hilt:hilt-compiler")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
